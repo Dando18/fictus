@@ -33,7 +33,7 @@ def main():
 
 
     # generate prediction from predict.py
-    prediction_score = get_prediction(title, link, base_url, content)
+    #prediction_score = get_prediction(title, link, base_url, content)
 
     # get score from scraper
     scrape_score = get_scrape_score(title, link, base_url, content)
@@ -42,7 +42,7 @@ def main():
     # crowd_score = get_crowd_score(title, link, content)
 
     # test print values
-    print('scrape_score = ' + str(scrape_score))
+    print('scrape_score = ' + scrape_score)
 
 
 # run main call
