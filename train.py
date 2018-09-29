@@ -32,13 +32,13 @@ def predict_content(x):
         # creates feature dictionary and processes stop-words
         text_clf = Pipeline([ ('vect', CountVectorizer()),
                               ('tfidf', TfidfTransformer()),
-                              ('clf', SGDClassifier(loss='hinge', penalty='l2',
+                              ('clf', SGDClassifier(loss='log', penalty='l2',
                                                     alpha=1e-3, random_state=42,
-                                                    max_iter=5, tol=None))
+                                                    max_iter=50, tol=None))
                               ])
         
         parameters = {'vect__ngram_range': [(1,1), (1,2)],
-                      'tfidf__use_idf': (True, False),
+                'tfidf__use_idf': (True, False),
                       'clf__alpha': (1e-2, 1e-3),
                       }
         gs_clf = GridSearchCV(text_clf, parameters, cv=5, iid=False, n_jobs=-1)
@@ -47,7 +47,8 @@ def predict_content(x):
         # save to pkl file
         joblib.dump(gs_clf.best_estimator_, './data/content_estimator.pkl')
 
-    return gs_clf.predict(x)
+    prob = gs_clf.predict_proba(x)[0]
+    return (prob[0], prob[1])
 
 
 ''' 
@@ -64,9 +65,9 @@ def predict_title(x):
         data = pd.read_csv(data_file)
         text_clf = Pipeline([ ('vect', CountVectorizer()),
                               ('tfidf', TfidfTransformer()),
-                              ('clf', SGDClassifier(loss='hinge', penalty='l2',
+                              ('clf', SGDClassifier(loss='log', penalty='l2',
                                                     alpha=1e-3, random_state=42,
-                                                    max_iter=5, tol=None))
+                                                    max_iter=1000, tol=None))
                               ])
 
         parameters = {'vect__ngram_range': [(1,1), (1,2)],
@@ -78,5 +79,6 @@ def predict_title(x):
 
         joblib.dump(gs_clf.best_estimator_, './data/title_estimator.pkl')
     
-    return gs_clf.predict(x)
+    prob = gs_clf.predict_proba(x)[0]
+    return (prob[0], prob[1])
 
