@@ -1,48 +1,93 @@
 <!DOCTYPE html>
 <html>
 	<head>
+
 		<link rel="stylesheet" href="mdl/material.min.css">
 		<script src="mdl/material.min.js"></script>
+		<script src="js/jquery-3.3.1.min.js"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	</head>
-	<body>
+	<body style="min-width=600px;min-height=800px;">
 
+		<div class="mdl-layout mdl-js-layout">
 
-		<form action="#">
-			<div class="mdl-textfield mdl-js-textfield">
-				<input class="mdl-textfield__input" type="text" id="sample1">
-				<label class="mdl-textfield__label" for="sample1">Text...</label>
+			<header class="mdl-layout__header">
+				<div class="mdl-layout-icon"></div>
+				<div class="mdl-layout__header-row">
+					<span class="mdl-layout__title">Fictus</span>
+				</div>
+			</header>
+
+		</div>
+
+		<div class="mdl-grid">
+			<div class="mdl-cell mdl-cell--4-col">
+				<form action="#">
+					<div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" type="text" id="title">
+						<label class="mdl-textfield__label" for="title">Article Title...</label>
+					</div>
+				</form>
 			</div>
-		</form>
+		</div>
 
-
-		<form action="#">
-			<div class="mdl-textfield mdl-js-textfield">
-				<textarea class="mdl-textfield__input" type="text" rows= "20" id="content" ></textarea>
-				<label class="mdl-textfield__label" for="content">Enter Content Here</label>
+		<div class="mdl-grid">
+			<div class="mdl-cell mdl-cell--4-col">
+				<form action="#">
+					<div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" type="text" id="link">
+						<label class="mdl-textfield__label" for="link">Link to Article...</label>
+					</div>
+				</form>
 			</div>
-		</form>
+		</div>
 
-		<!-- Colored raised button -->
-		<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-			Submit
-		</button>
+		<div class="mdl-grid">
+			<div class="mdl-cell mdl-cell--4-col">
+				<form action="#">
+					<div class="mdl-textfield mdl-js-textfield">
+						<textarea class="mdl-textfield__input" type="text" rows= "5" id="content" ></textarea>
+						<label class="mdl-textfield__label" for="content">Enter Article Content Here...</label>
+					</div>
+				</form>
+			</div>
+		</div>
 
-		<!-- Colored FAB button with ripple -->
-		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-			<i class="material-icons">done</i>
-		</button>
+		<div class="mdl-grid">
+			<!-- Colored raised button -->
+			<div class="mdl-cell mdl-cell--1-col" >
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit_btn">
+					Submit
+				</button>
+			</div>
+			<div class="mdl-cell mdl-cell--1-col" style="display:flex;">
+				<!-- Colored FAB button with ripple -->
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+					<i class="material-icons">done</i>
+				</button>
+			</div>
 
-		<!-- Colored FAB button with ripple -->
-		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-			<i class="material-icons">clear</i>
-		</button>
+			<div class="mdl-cell mdl-cell--1-col">
+				<!-- Colored FAB button with ripple -->
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+					<i class="material-icons">clear</i>
+				</button>
+			</div>
+			<div class="mdl-cell mdl-cell--1-col">
+				<!-- Colored FAB button with ripple -->
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+					<i class="material-icons">help</i>
+				</button>
+			</div>
+		</div>
 
-		<!-- Colored FAB button with ripple -->
-		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-			<i class="material-icons">help</i>
-		</button>
+		<div class="mdl-grid">
+			<div class="mdl-cell mdl-cell--4-col">
+				<p id="results">Results:</p>	
+			</div>
+		</div>
 
+		<script src="popup.js"></script>
 
 	</body>
 </html>
