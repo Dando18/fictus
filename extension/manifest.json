@@ -1,0 +1,9 @@
+{
+	"name": "Fictus",
+	"version": "0.1",
+	"description": "Discover What's Real",
+	"browser_action": {
+		"default_popup": "popup.html"
+	},
+	"manifest_version": 2
+}
