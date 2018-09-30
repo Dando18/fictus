@@ -25,7 +25,6 @@ def main():
 
     # remove extra parts of link
     base_url = re.sub(r'(http(s)?:\/\/)|(\/.*){1}', '', link)
-    print('\nbase_url = ' + base_url + '\n')
 
     # read content from content_file
     with open(content_filename, 'r') as content_file:
@@ -42,7 +41,7 @@ def main():
     # crowd_score = get_crowd_score(title, link, content)
 
     # test print values
-    print('scrape_score = ' + scrape_score)
+    print('scrape_score = ' + str(scrape_score))
 
 
 # run main call

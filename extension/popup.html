@@ -62,20 +62,20 @@
 			</div>
 			<div class="mdl-cell mdl-cell--1-col" style="display:flex;">
 				<!-- Colored FAB button with ripple -->
-				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored" id="vote_pos_btn">
 					<i class="material-icons">done</i>
 				</button>
 			</div>
 
 			<div class="mdl-cell mdl-cell--1-col">
 				<!-- Colored FAB button with ripple -->
-				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored" id="vote_neg_btn">
 					<i class="material-icons">clear</i>
 				</button>
 			</div>
 			<div class="mdl-cell mdl-cell--1-col">
 				<!-- Colored FAB button with ripple -->
-				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored" id="vote_may_btn">
 					<i class="material-icons">help</i>
 				</button>
 			</div>
@@ -83,7 +83,44 @@
 
 		<div class="mdl-grid">
 			<div class="mdl-cell mdl-cell--4-col">
-				<p id="results">Results:</p>	
+				<table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp">
+					<thead>
+						<tr>
+							<th class="mdl-data-table__cell--non-numeric"></th>
+							<th>Result</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric">Positive Votes</td>
+							<td id="pos" style="color: green;"></td>
+						</tr>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric">Negative Votes</td>
+							<td id="neg" style="color:red;"></td>
+						</tr>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric">Maybe Votes</td>
+							<td id="may" style="color:#ffad33;"></td>
+						</tr>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric">Title Validity</td>
+							<td id="title_prob"></td>
+						</tr>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric">Article Validity</td>
+							<td id="content_prob"></td>
+						</tr>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric">Scrape Rating</td>
+							<td id="scrape_rating"></td>
+						</tr>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric"><b>Overall Rating</b></td>
+							<td id="overall_rating"></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 

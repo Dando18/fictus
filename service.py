@@ -3,6 +3,8 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SocketServer
 import re
 from train import *
+from scrape import *
+import json
 
 # takes the article title and returns the vote count formatted as
 # (pos, neg, maybe). returns (0,0,0) if not in .dat file
@@ -36,7 +38,7 @@ def incVotes(title, delta):
 class Service(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
-        self.send_header('Content-type', 'text/plain')
+        self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
@@ -50,33 +52,40 @@ class Service(BaseHTTPRequestHandler):
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length)
+        post_data = json.loads(self.rfile.read(content_length))
+
         
-        # return value at end of post
+        # return value at end of POST
         ret = ''
 
-        m = re.match('title=([^&]*)&content=([^&]*)&type=([^&]*)', post_data)
-        if len(m.groups()) != 3:
-            ret = 'error: bad POST format'
-        else:
-            title = m.group(1).replace('+', ' ').replace('%26', '&')
-            content = m.group(2).replace('+',' ').replace('%26','&')
-            typ = m.group(3)
-            
-            if typ == 'get':
-                # return the amount of votes in that category
-                # format: positive | negative | maybe | title_real_certainty | content_real_certainty
-                out = getVotes(title) + (predict_title([title])[1],) + (predict_content([content])[1],)
-                ret = ' | '.join(map(str, out))
-            elif typ == 'pos':
-                # add a positive vote
-                incVotes(title, (1,0,0))
-            elif typ == 'neg':
-                # add a negative vote
-                incVotes(title, (0,1,0))
-            elif typ == 'may':
-                # add an unsure vote
-                incVotes(title, (0,0,1))
+        title = post_data['title']
+        content = post_data['content']
+        link = post_data['link']
+        typ = post_data['type']
+
+        base_url = re.sub(r'(http(s)?:\/\/)|(\/.*){1}', '', link)
+
+        if typ == 'get':
+            # return the amount of votes in that category
+            votes = getVotes(title)
+            title_pred = predict_title([title])[1]
+            content_pred = predict_content([content])[1]
+            ret = json.dumps( {'pos': votes[0], 'neg': votes[1],
+                               'may': votes[1], 'title_prob': title_pred,
+                               'content_prob': content_pred}
+                               )
+        elif typ == 'pos':
+            # add a positive vote
+            incVotes(title, (1,0,0))
+        elif typ == 'neg':
+            # add a negative vote
+            incVotes(title, (0,1,0))
+        elif typ == 'may':
+            # add an unsure vote
+            incVotes(title, (0,0,1))
+        elif typ == 'getScrape':
+            ret = json.dumps( {'scrape_rating': get_scrape_score(title, link, base_url, content) })
+
 
         self._set_headers()
         self.wfile.write(ret)
