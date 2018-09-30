@@ -24,9 +24,13 @@ def text_from_html(body):
 
 def get_scrape_score(articletitle, link, basesite, content):
     
-    articletitle = articletitle.replace(' ', '+')
-
+    #articletitle = articletitle.replace(' ', '+')
+    content = content.replace('+', ' ')
+    articletitle = urllib2.quote(articletitle.encode('utf-8'), '+/:')
+    basesite = urllib2.quote(basesite.encode('utf-8'), '+/:')
+    
     search_url = "https://www.google.com/search?q=" + (articletitle) + "+-site%3A" + (basesite)
+
     request = urllib2.Request(search_url, None, {'User-Agent': 'Mozilla/5.0'})
     search_response = urllib2.urlopen(request).read()
 
@@ -81,32 +85,22 @@ def get_scrape_score(articletitle, link, basesite, content):
 
     
     #Dictionary to store all of the occurences of each word
-    content_dict = {}
 
     #This is the list of the words in content
     split_content = content.split()
 
     #(total other articles)
     total_oa = 0
-    print('beginning word hunt')
+    total_content = 0
     #iterating through split_content to check each word individually
     for word in split_content:
-        inDict = word not in content_dict
         #for (article content); to check through the list of comparison articles to get each out 
         for ac in comparison_articles:
             total_oa += ac.count(' ')+1
             #Seeing if any of the words are in the comparison article
-            if inDict:
-                content_dict[word] = ac.count(word)
-            #If it is in the dictionary, increment the occurence in this article
-            else:
-                content_dict[word] += ac.count(word)
+            total_content += ac.count(word)
     
-    total_content = 0
-
-    #Sum all of the occurences of the words altogether
-    for key in content_dict:
-        total_content += content_dict[key]
-
+    if total_oa == 0:
+        return 0.0
     return ((1.0 * total_content * len(split_content)) /(1.0 * total_oa))
 

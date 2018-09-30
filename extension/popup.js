@@ -6,31 +6,33 @@ var vote_may_btn = document.getElementById('vote_may_btn');
 
 var currentVote = "";
 
+var finalRating = 0.0;
+var titleRating = 0.0;
+var contentRating = 0.0;
+var voteRating = 0.0;
+var scrapeRating = -1;
+
 
 function clean(str) {
 	return str.replace(/\s/g, '+').replace(/&/g, '%26')
 }
 
+function clamp(min, max, val) {
+	return (val<min)?min:((val>max)?max:val);
+}
+
 function save() {
 	// read in fields
 	var title = document.getElementById('title').value;
-    var content = document.getElementById('content').value;
     var link = document.getElementById('link').value;
 	chrome.storage.sync.set({'title': title}, function(){});
-	chrome.storage.sync.set({'content': content}, function(){});
 	chrome.storage.sync.set({'link': link}, function(){});
 }
 
 function load() {
 	chrome.storage.sync.get(['title'], function(result) {
 		if (result.title) {
-			document.getElementById('title').value = '';
 			document.getElementById('title').value = result.title;
-		}
-	});
-	chrome.storage.sync.get(['content'], function(result) {
-		if (result.content) {
-			document.getElementById('content').value = result.content;
 		}
 	});
 	chrome.storage.sync.get(['link'], function(result) {
@@ -39,6 +41,27 @@ function load() {
 		}
 	});
 }
+
+function updateTotal() {
+	if (voteRating == -1) {
+		finalRating = (0.4*scrapeRating + 0.4*contentRating + 0.2*titleRating);
+	} else if (scrapeRating == -1) {
+		finalRating = (0.4*voteRating + 0.4*contentRating + 0.2*titleRating);
+	} else {
+		finalRating = (0.25*voteRating + 0.25*scrapeRating + 0.2*titleRating + 0.3*contentRating);
+	}
+
+	document.getElementById('overall_rating').innerHTML = (100.0*finalRating).toFixed(3) + '%';
+
+	if (finalRating > 0.65) {
+		document.getElementById('overall_rating').style.color = 'green';
+	} else if (finalRating > 0.45) {
+		document.getElementById('overall_rating').style.color = '#ffad33';
+	} else {
+		document.getElementById('overall_rating').style.color = 'red';
+	}
+}
+
 
 function setVotingButtonsDisabled(dis) {
 	document.getElementById('vote_pos_btn').disabled = dis;
@@ -50,7 +73,15 @@ function writeOutput(data) {
 	document.getElementById('pos').innerHTML = data.pos;
 	document.getElementById('neg').innerHTML = data.neg;
 	document.getElementById('may').innerHTML = data.may;
+	if (data.pos == 0 && data.neg == 0) {
+		voteRating = -1;
+	} else if (data.neg == 0) {
+		voteRating = 1;
+	} else {
+		voteRating = (data.pos/data.neg / 2.0);
+	}
 
+	titleRating = data.title_prob;
 	document.getElementById('title_prob').innerHTML = (100*data.title_prob).toFixed(3) + '%';
 	if (data.title_prob > 0.65) {
 		document.getElementById('title_prob').style.color = 'green';
@@ -60,6 +91,7 @@ function writeOutput(data) {
 		document.getElementById('title_prob').style.color = 'red';
 	}
 
+	contentRating = data.content_prob;
 	document.getElementById('content_prob').innerHTML = (100*data.content_prob).toFixed(3) + '%';
 	if (data.content_prob > 0.65) {
 		document.getElementById('content_prob').style.color = 'green';
@@ -68,6 +100,7 @@ function writeOutput(data) {
 	} else {
 		document.getElementById('content_prob').style.color = 'red';
 	}
+	updateTotal();
 }
 
 
@@ -102,8 +135,19 @@ submit_btn.addEventListener('click', function() {
 			return;
 		}
 		response.json().then(function(data) {
-			document.getElementById('scrape_rating').innerHTML = data.scrape_rating;
+			var scr = clamp(0.0, 1.0, 2.5*data.scrape_rating);
+			scrapeRating = scr;
 
+			if (scr > 0.65) {
+				document.getElementById('scrape_rating').style.color = 'green';
+			} else if (scr > 0.45) {
+				document.getElementById('scrape_rating').style.color = '#ffad33';
+			} else {
+				document.getElementById('scrape_rating').style.color = 'red';
+			}
+
+			document.getElementById('scrape_rating').innerHTML = (100.0*scr).toFixed(3)+'%';
+			updateTotal();
 		});
 	});
 });

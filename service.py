@@ -84,7 +84,8 @@ class Service(BaseHTTPRequestHandler):
             # add an unsure vote
             incVotes(title, (0,0,1))
         elif typ == 'getScrape':
-            ret = json.dumps( {'scrape_rating': get_scrape_score(title, link, base_url, content) })
+            tmp = get_scrape_score(title, link, base_url, content)
+            ret = json.dumps( {'scrape_rating': tmp })
 
 
         self._set_headers()
