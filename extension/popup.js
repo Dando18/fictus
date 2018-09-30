@@ -123,6 +123,9 @@ submit_btn.addEventListener('click', function() {
 			// data is good and correct. make call to writeOutput
 			writeOutput(data);
 			setVotingButtonsDisabled(false);
+			
+			// create loading spindle
+			document.getElementById('scrape_spinner').classList.add('is-active');
 		});
 	});
 	
@@ -146,7 +149,10 @@ submit_btn.addEventListener('click', function() {
 				document.getElementById('scrape_rating').style.color = 'red';
 			}
 
+			document.getElementById('scrape_spinner').classList.remove('is-active');
+
 			document.getElementById('scrape_rating').innerHTML = (100.0*scr).toFixed(3)+'%';
+
 			updateTotal();
 		});
 	});
