@@ -32,23 +32,23 @@ function save() {
 function load() {
 	chrome.storage.sync.get(['title'], function(result) {
 		if (result.title) {
-			document.getElementById('title').value = result.title;
+			document.querySelector('#title').parentNode.MaterialTextfield.change(result.title);
 		}
 	});
 	chrome.storage.sync.get(['link'], function(result) {
 		if (result.link) {
-			document.getElementById('link').value = result.link;
+			document.querySelector('#link').parentNode.MaterialTextfield.change(result.link);
 		}
 	});
 }
 
 function updateTotal() {
 	if (voteRating == -1) {
-		finalRating = (0.4*scrapeRating + 0.4*contentRating + 0.2*titleRating);
+		finalRating = (0.3*scrapeRating + 0.5*contentRating + 0.2*titleRating);
 	} else if (scrapeRating == -1) {
 		finalRating = (0.4*voteRating + 0.4*contentRating + 0.2*titleRating);
 	} else {
-		finalRating = (0.25*voteRating + 0.25*scrapeRating + 0.2*titleRating + 0.3*contentRating);
+		finalRating = (0.2*voteRating + 0.3*scrapeRating + 0.2*titleRating + 0.3*contentRating);
 	}
 
 	document.getElementById('overall_rating').innerHTML = (100.0*finalRating).toFixed(3) + '%';
