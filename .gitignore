@@ -1,5 +1,5 @@
-data/*
-*.pkl
+__MACOSX
+*.zip
 *.swp
 *.txt
 *.pyc
